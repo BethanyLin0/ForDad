@@ -64,5 +64,31 @@
 
 <p class="site-footer">Made with love for Dad's birthday.</p>
 
+<!-- Firebase SDK Integration -->
+<script type="module">
+  // Import the required Firebase SDK modules [1]
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // Your web app's Firebase configuration
+  // TODO: Replace YOUR_API_KEY and YOUR_APP_ID with values from the Firebase Console!
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "fordad-592b2.firebaseapp.com",
+    projectId: "fordad-592b2",
+    storageBucket: "fordad-592b2.firebasestorage.app",
+    messagingSenderId: "741733390827",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Initialize Firebase [1]
+  const app = initializeApp(firebaseConfig);
+
+  // Initialize Cloud Firestore
+  const db = getFirestore(app);
+
+  console.log("Firebase & Firestore connected successfully!");
+</script>
+
 </body>
 </html>
