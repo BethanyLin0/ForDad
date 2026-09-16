@@ -4,7 +4,375 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chapter 01: Where It All Started — The Big Five-O</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+  :root {
+    --bg-main: #f8f6f0;
+    --bg-tint: #eee9dc;
+    --card-bg: #ffffff;
+    --text-primary: #222222;
+    --text-muted: #666666;
+    --accent: #d96b27;
+    --accent-hover: #b85418;
+    --border-color: #e2ddd3;
+    --font-heading: 'Georgia', serif;
+    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    padding-top: 60px;
+  }
+
+  /* Topbar navigation */
+  .topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(248, 246, 240, 0.92);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    border-bottom: 1px solid var(--border-color);
+    z-index: 100;
+  }
+
+  .topbar__mark {
+    font-family: var(--font-heading);
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .timeline-nav {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .timeline-nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s ease;
+  }
+
+  .timeline-nav a:hover, .timeline-nav a.is-active {
+    color: var(--accent);
+  }
+
+  .timeline-nav__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+
+  /* Hero Section */
+  .hero {
+    position: relative;
+    max-width: 900px;
+    margin: 3rem auto 2rem;
+    padding: 2rem;
+  }
+
+  .hero__num {
+    position: absolute;
+    top: -2rem;
+    left: 1rem;
+    font-size: 8rem;
+    font-family: var(--font-heading);
+    color: rgba(0,0,0,0.04);
+    font-weight: 800;
+    user-select: none;
+    z-index: -1;
+  }
+
+  .hero__kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .hero__title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    margin: 0.25rem 0 0.75rem;
+    line-height: 1.15;
+  }
+
+  .hero__meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__lede {
+    font-size: 1.15rem;
+    color: #444;
+    background: #f0ebd9;
+    padding: 1rem 1.25rem;
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    outline: none;
+  }
+
+  /* Section Containers */
+  .section {
+    padding: 4rem 1.5rem;
+  }
+
+  .section--tint {
+    background-color: var(--bg-tint);
+  }
+
+  .section__inner {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .story {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .story--reverse {
+    direction: rtl;
+  }
+
+  .story--reverse .story__text {
+    direction: ltr;
+  }
+
+  .story--reverse .story__media {
+    direction: ltr;
+  }
+
+  .story__eyebrow {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .story__title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    margin: 0.25rem 0 1rem;
+  }
+
+  .story__text p {
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  .story__prompt {
+    font-style: italic;
+    color: var(--text-muted);
+    background: rgba(0,0,0,0.03);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+
+  /* Gallery Grid */
+  .section__head {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .section__title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2.5rem;
+    justify-items: center;
+  }
+
+  /* Photo Frame / Polaroid Style */
+  .photo {
+    background: var(--card-bg);
+    padding: 12px 12px 18px 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    border-radius: 4px;
+    transform: rotate(var(--rotate, 0deg));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .photo:hover {
+    transform: rotate(0deg) scale(1.02);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+    z-index: 10;
+  }
+
+  .photo__frame {
+    width: 100%;
+    aspect-ratio: var(--ratio, 4/5);
+    background: #f2efe9;
+    border: 2px dashed #d5cfc2;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .photo__frame:hover, .photo__frame.dragover {
+    background: #e8e3d8;
+    border-color: var(--accent);
+  }
+
+  .photo__frame svg {
+    width: 42px;
+    height: 42px;
+    color: #999;
+    margin-bottom: 0.5rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .photo__frame:hover svg {
+    color: var(--accent);
+    transform: scale(1.1);
+  }
+
+  .photo__hint {
+    font-size: 0.85rem;
+    color: #777;
+    text-align: center;
+    padding: 0 1rem;
+    pointer-events: none;
+    font-weight: 500;
+  }
+
+  .photo__file-input {
+    display: none;
+  }
+
+  .photo__preview {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    z-index: 2;
+  }
+
+  .photo__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.25 ease;
+    z-index: 3;
+    pointer-events: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .photo__frame:hover .photo__overlay {
+    opacity: 1;
+  }
+
+  figcaption {
+    margin-top: 0.85rem;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: #444;
+    text-align: center;
+    width: 100%;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+    outline: none;
+  }
+
+  figcaption:hover, figcaption:focus {
+    background: rgba(0,0,0,0.05);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+  }
+
+  /* Chapter Navigation Footer */
+  .chapter-footer {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+  }
+
+  .chapter-footer a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s ease;
+  }
+
+  .chapter-footer a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .story {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .topbar {
+      padding: 0 1rem;
+    }
+    .timeline-nav__label {
+      display: none;
+    }
+    .hero__title {
+      font-size: 2.2rem;
+    }
+  }
+</style>
 </head>
 <body data-era="1">
 
@@ -25,9 +393,7 @@
     <span class="hero__kicker">Chapter 01</span>
     <h1 class="hero__title">Where It All Started</h1>
     <div class="hero__meta"><span>1976–1994</span><span>Age 0–18</span></div>
-    <p class="hero__lede">✏️ Edit this: a short intro to his childhood and teenage
-      years — where he grew up, what kind of kid he was, what the house or the
-      street or the school looked like.</p>
+    <p class="hero__lede" contenteditable="true" title="Click to edit story intro">✏️ Edit this: a short intro to his childhood and teenage years — where he grew up, what kind of kid he was, what the house or the street or the school looked like.</p>
   </div>
 </section>
 
@@ -36,18 +402,19 @@
     <div class="story__text">
       <span class="story__eyebrow">First Memories</span>
       <h2 class="story__title">The early years</h2>
-      <p>✏️ Edit this: a story about his earliest years — his parents, siblings,
-        the town he was born in, a family tradition from back then.</p>
-      <p class="story__prompt">Prompt: What's the oldest photo you have of him? What
-        was happening in it?</p>
+      <p contenteditable="true">✏️ Edit this: a story about his earliest years — his parents, siblings, the town he was born in, a family tradition from back then.</p>
+      <p class="story__prompt" contenteditable="true">Prompt: What's the oldest photo you have of him? What was happening in it?</p>
     </div>
     <div class="story__media">
       <figure class="photo" style="--rotate:-3deg">
         <div class="photo__frame" style="--ratio:4/5">
+          <input type="file" class="photo__file-input" accept="image/*">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.3"/></svg>
-          <span class="photo__hint">Replace with a baby or early-childhood photo</span>
+          <span class="photo__hint">Click or drag &amp; drop to upload baby / early-childhood photo</span>
+          <img class="photo__preview" alt="Uploaded Preview">
+          <div class="photo__overlay">Change Photo</div>
         </div>
-        <figcaption>Caption — e.g. "First birthday, 1977"</figcaption>
+        <figcaption contenteditable="true" title="Click to edit caption">First birthday, 1977</figcaption>
       </figure>
     </div>
   </div>
@@ -62,24 +429,33 @@
     <div class="gallery">
       <figure class="photo" style="--rotate:2deg">
         <div class="photo__frame" style="--ratio:1/1">
+          <input type="file" class="photo__file-input" accept="image/*">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.3"/></svg>
-          <span class="photo__hint">Photo</span>
+          <span class="photo__hint">Upload Photo</span>
+          <img class="photo__preview" alt="Uploaded Preview">
+          <div class="photo__overlay">Change Photo</div>
         </div>
-        <figcaption>Caption</figcaption>
+        <figcaption contenteditable="true" title="Click to edit caption">Caption</figcaption>
       </figure>
       <figure class="photo" style="--rotate:-2deg">
         <div class="photo__frame" style="--ratio:4/5">
+          <input type="file" class="photo__file-input" accept="image/*">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.3"/></svg>
-          <span class="photo__hint">Photo</span>
+          <span class="photo__hint">Upload Photo</span>
+          <img class="photo__preview" alt="Uploaded Preview">
+          <div class="photo__overlay">Change Photo</div>
         </div>
-        <figcaption>Caption</figcaption>
+        <figcaption contenteditable="true" title="Click to edit caption">Caption</figcaption>
       </figure>
       <figure class="photo" style="--rotate:3deg">
         <div class="photo__frame" style="--ratio:1/1">
+          <input type="file" class="photo__file-input" accept="image/*">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.3"/></svg>
-          <span class="photo__hint">Photo</span>
+          <span class="photo__hint">Upload Photo</span>
+          <img class="photo__preview" alt="Uploaded Preview">
+          <div class="photo__overlay">Change Photo</div>
         </div>
-        <figcaption>Caption</figcaption>
+        <figcaption contenteditable="true" title="Click to edit caption">Caption</figcaption>
       </figure>
     </div>
   </div>
@@ -90,18 +466,19 @@
     <div class="story__text">
       <span class="story__eyebrow">School Days &amp; Mischief</span>
       <h2 class="story__title">The kid everyone remembers</h2>
-      <p>✏️ Edit this: a school story, a nickname, a friend group, a sport or
-        hobby he loved, something he got in trouble for.</p>
-      <p class="story__prompt">Prompt: What's the story his old friends still
-        bring up?</p>
+      <p contenteditable="true">✏️ Edit this: a school story, a nickname, a friend group, a sport or hobby he loved, something he got in trouble for.</p>
+      <p class="story__prompt" contenteditable="true">Prompt: What's the story his old friends still bring up?</p>
     </div>
     <div class="story__media">
       <figure class="photo" style="--rotate:4deg">
         <div class="photo__frame" style="--ratio:4/5">
+          <input type="file" class="photo__file-input" accept="image/*">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.3"/></svg>
-          <span class="photo__hint">School photo or team photo</span>
+          <span class="photo__hint">Upload school or team photo</span>
+          <img class="photo__preview" alt="Uploaded Preview">
+          <div class="photo__overlay">Change Photo</div>
         </div>
-        <figcaption>Caption</figcaption>
+        <figcaption contenteditable="true" title="Click to edit caption">Caption</figcaption>
       </figure>
     </div>
   </div>
@@ -112,16 +489,18 @@
     <div class="story__text">
       <span class="story__eyebrow">Growing Up Fast</span>
       <h2 class="story__title">Almost grown</h2>
-      <p>✏️ Edit this: the teenage years — first job, first car, first heartbreak,
-        graduation, what he wanted to be when he grew up.</p>
+      <p contenteditable="true">✏️ Edit this: the teenage years — first job, first car, first heartbreak, graduation, what he wanted to be when he grew up.</p>
     </div>
     <div class="story__media">
       <figure class="photo" style="--rotate:-3deg">
         <div class="photo__frame" style="--ratio:4/5">
+          <input type="file" class="photo__file-input" accept="image/*">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.3"/></svg>
-          <span class="photo__hint">Graduation or teen photo</span>
+          <span class="photo__hint">Upload graduation or teen photo</span>
+          <img class="photo__preview" alt="Uploaded Preview">
+          <div class="photo__overlay">Change Photo</div>
         </div>
-        <figcaption>Caption</figcaption>
+        <figcaption contenteditable="true" title="Click to edit caption">Caption</figcaption>
       </figure>
     </div>
   </div>
@@ -132,5 +511,74 @@
   <a href="02-twenties.html">Chapter 02: The Twenties →</a>
 </nav>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const photoFrames = document.querySelectorAll('.photo__frame');
+
+    photoFrames.forEach((frame) => {
+      const fileInput = frame.querySelector('.photo__file-input');
+      const previewImg = frame.querySelector('.photo__preview');
+
+      // Click on frame to open file picker
+      frame.addEventListener('click', (e) => {
+        // Prevent click looping if clicking file input itself
+        if (e.target !== fileInput) {
+          fileInput.click();
+        }
+      });
+
+      // Handle file selection from file dialog
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          handleFile(file, previewImg, frame);
+        }
+      });
+
+      // Drag and Drop Event Listeners
+      ['dragenter', 'dragover'].forEach(eventName => {
+        frame.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          frame.classList.add('dragover');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        frame.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          frame.classList.remove('dragover');
+        }, false);
+      });
+
+      // Handle file dropped
+      frame.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+
+        if (files && files.length > 0) {
+          const file = files[0];
+          if (file.type.startsWith('image/')) {
+            // Assign file to input for consistency
+            fileInput.files = files;
+            handleFile(file, previewImg, frame);
+          }
+        }
+      });
+    });
+
+    // Helper function to read image file and display preview
+    function handleFile(file, imgElement, frameElement) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imgElement.src = e.target.result;
+        imgElement.style.display = 'block';
+        frameElement.style.border = 'none'; // Clean up frame border when image loaded
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
 </body>
 </html>
